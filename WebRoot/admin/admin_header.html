@@ -1,0 +1,53 @@
+<!--Header-part-->
+<link rel="stylesheet" href="/css/pintuer.css">
+<link rel="stylesheet" href="/css/admin.css">
+<script src="/js/jquery.js"></script>
+<div id="header">
+  <h1><a href="dashboard.html">绠＄悊鍚庡彴</a></h1>
+</div>
+<!--close-Header-part-->
+
+
+<!--top-Header-menu-->
+
+<div class="header bg-main">
+  <div class="logo margin-big-left fadein-top">
+    <h1><img src="/img/y.jpg" class="radius-circle rotate-hover" height="50" alt="" />鍚庡彴绠＄悊涓績</h1>
+  </div>
+  <div class="head-l"><a class="button button-little bg-green" href="" target="_blank">
+	  <span class="icon-home"></span> 鍓嶅彴棣栭〉</a> &nbsp;&nbsp;
+	  &nbsp;&nbsp;<a class="button button-little bg-red" href="/index/login.html">
+	  <span class="icon-power-off"></span> 閫�嚭鐧诲綍</a> </div>
+</div>
+<div class="leftnav">
+  <div class="leftnav-title"><strong><span class="icon-list"></span>鑿滃崟鍒楄〃</strong></div>
+  <h2><span class="icon-user"></span>鍩烘湰璁剧疆</h2>
+  <ul style="display:block">
+    <li><a href="/info.html" target="right"><span class="icon-caret-right"></span>缃戠珯璁剧疆</a></li>
+    <li><a href="/book" target="right" ><span class="icon-caret-right"></span>鏂伴椈绠＄悊</a></li>
+    <li><a href="/pass.html" target="right"><span class="icon-caret-right"></span>淇敼瀵嗙爜</a></li>
+    <li><a href="/page.html" target="right"><span class="icon-caret-right"></span>鍗曢〉绠＄悊</a></li>  
+    <li><a href="/index/adv.html" target="right"><span class="icon-caret-right"></span>棣栭〉杞挱</a></li>   
+    <li><a href="/index/book.html" target="right"><span class="icon-caret-right"></span>鐣欒█绠＄悊</a></li>     
+    <li><a href="/index/column.html" target="right"><span class="icon-caret-right"></span>鏍忕洰绠＄悊</a></li>
+    <li><a href="/index/list.html" target="right"><span class="icon-caret-right"></span>鍐呭绠＄悊</a></li>
+    <li><a href="/index/add.html" target="right"><span class="icon-caret-right"></span>娣诲姞鍐呭</a></li>
+    <li><a href="/index/cate.html" target="right"><span class="icon-caret-right"></span>鍒嗙被绠＄悊</a></li>        
+</div>
+<script type="text/javascript">
+$(function(){
+  $(".leftnav h2").click(function(){
+	  $(this).next().slideToggle(200);	
+	  $(this).toggleClass("on"); 
+  })
+  $(".leftnav ul li a").click(function(){
+	    $("#a_leader_txt").text($(this).text());
+  		$(".leftnav ul li a").removeClass("on");
+		$(this).addClass("on");
+  })
+});
+</script>
+<ul class="bread">
+  <li><a href="{:U('Index/info')}" target="right" class="icon-home"> 棣栭〉</a></li>
+  <li><a href="##" id="a_leader_txt">缃戠珯淇℃伅</a></li>
+</ul>

@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>完整demo</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    
+</head>
+<body>
+<style>
+#uploadImg{ font-size:12px; overflow:hidden; position:absolute}
+#file{ position:absolute; z-index:100; margin-left:-180px; font-size:60px;opacity:0;filter:alpha(opacity=0); margin-top:-5px;}
+</style>
+<span id="uploadImg">
+<input type="file" id="file" size="1" >
+<a href="#">上传图片</a> 
+</span>
+<br><br><br><br>
+  <!-- 上传图片 -->
+    <input type="file" name="image" id="imageFile">
+    <button id="upload" onclick="upload()">上传</button>
+    <!-- 存储图片地址，并显示图片 -->
+    <input type="hidden" name="pictureSrc" id="pictureSrc">
+    <div id="show"></div>
+
+   
+<script type="text/javascript">
+function upload() {
+var f=JSON.stringify({fileName:$('#imageFile').val()});
+    $.ajaxFileUpload({     
+        url : "/admin/imageUpload",   //提交的路径
+        type: 'post',
+        secureuri : false, // 是否启用安全提交，默认为false
+        fileElementId : 'imageFile', // file控件id
+        dataType : 'JSON',
+        cache: false,
+        processData: false,
+        contentType: false,
+        data : f, // 键:值，传递文件名
+        success : function(data) {
+        console.log(data);
+        var reg = /<pre.+?>(.+)<\/pre>/g;  
+		var result = data.match(reg);  
+		data = JSON.parse(RegExp.$1);
+        console.log(data);
+        console.log(data.src);
+            if (data.error == 0) {
+                var src = data.src;
+                $('#show').append("<img src='/" + data.src + "'>");  //显示图片
+
+                // 存储已上传图片地址
+                var oldSrc = $('#pictureSrc').val();
+                var newSrc = "";
+                if (oldSrc != "")
+                    newSrc = oldSrc + ";" + src;
+                else
+                    newSrc = src;
+
+                $('#pictureSrc').val(newSrc);   //保存路径
+            } else {
+                alert(data.message);
+            }
+        },
+        error : function(data, status) {
+            alert(data.message);
+        }
+    });
+}
+</script>
+
+    <!-- 图片上传js文件,放到最后加载 -->
+    <script type="text/javascript" src="/js/jquery-2.0.0.min.js"></script>
+    <script type="text/javascript" src="/js/ajaxfileupload.js"></script>
+    
+</body>
+</html>

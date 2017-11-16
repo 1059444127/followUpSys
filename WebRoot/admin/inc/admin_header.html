@@ -1,0 +1,145 @@
+<!--Header-part-->
+<script src="/js/excanvas.min.js"></script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/jquery.ui.custom.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/jquery.flot.min.js"></script>
+<script src="/js/jquery.flot.resize.min.js"></script>
+<script src="/js/jquery.peity.min.js"></script>
+<script src="/js/fullcalendar.min.js"></script>
+<script src="/js/matrix.js"></script>
+<script src="/js/matrix.dashboard.js"></script>
+<script src="/js/jquery.gritter.min.js"></script>
+<script src="/js/matrix.interface.js"></script>
+<script src="/js/matrix.chat.js"></script>
+<script src="/js/jquery.validate.js"></script>
+<script src="/js/matrix.form_validation.js"></script>
+<script src="/js/jquery.wizard.js"></script>
+<script src="/js/jquery.uniform.js"></script>
+<script src="/js/select2.min.js"></script>
+<script src="/js/matrix.popover.js"></script>
+<script src="/js/jquery.dataTables.min.js"></script>
+<script src="/js/matrix.tables.js"></script>
+
+
+<script src="/js/bootstrap-colorpicker.js"></script>
+<script src="/js/bootstrap-datepicker.js"></script>
+<script src="/js/jquery.toggle.buttons.html"></script>
+<script src="/js/matrix.form_common.js"></script>
+<script src="/js/wysihtml5-0.3.0.js"></script>
+<script src="/js/jquery.peity.min.js"></script>
+<script src="/js/bootstrap-wysihtml5.js"></script>
+<div id="header">
+  <h1>管理后台</h1>
+</div>
+<!--close-Header-part-->
+
+
+<!--top-Header-menu-->
+<div id="user-nav" class="navbar navbar-inverse">
+  <ul class="nav">
+    <li  class="dropdown" id="profile-messages" ><a title="" href="#" data-toggle="dropdown" data-target="#profile-messages" class="dropdown-toggle"><i class="icon icon-user"></i> 
+     <span class="text"> ${admin_user.reimbursementname!}   </span></a>
+      
+    </li>
+   <!--  <li class="dropdown" id="menu-messages"><a href="#" data-toggle="dropdown" data-target="#menu-messages" class="dropdown-toggle"><i class="icon icon-envelope"></i> <span class="text">Messages</span> <span class="label label-important">5</span> <b class="caret"></b></a>
+      <ul class="dropdown-menu">
+        <li><a class="sAdd" title="" href="#"><i class="icon-plus"></i> new message</a></li>
+        <li class="divider"></li>
+        <li><a class="sInbox" title="" href="#"><i class="icon-envelope"></i> inbox</a></li>
+        <li class="divider"></li>
+        <li><a class="sOutbox" title="" href="#"><i class="icon-arrow-up"></i> outbox</a></li>
+        <li class="divider"></li>
+        <li><a class="sTrash" title="" href="#"><i class="icon-trash"></i> trash</a></li>
+      </ul>
+    </li>-->
+    <!-- li class=""><a title="" href="#"><i class="icon icon-cog"></i> <span class="text">个人设置</span></a></li-->
+    <li class=""><a title="" href="/admin/out"><i class="icon icon-share-alt"></i> <span class="text">退出登陆</span></a></li>
+  </ul>
+</div>
+<!--close-top-Header-menu-->
+<!--start-top-serch
+<div id="search">
+  <input type="text" placeholder="Search here..."/>
+  <button type="submit" class="tip-bottom" title="Search"><i class="icon-search icon-white"></i></button>
+</div>
+<!--close-top-serch-->
+<div class="copyrights"> ${softinfo.companyinfo!}  版权所有</div>
+<!--sidebar-menu-->
+<div id="sidebar"><a href="#" class="visible-phone"><i class="icon icon-home"></i> 菜单面板</a>
+  <ul>
+    <li><a href="#" onclick="javascript:window.location.href='/admin/add?type=1';"><span>添加患者信息</span></a> </li>
+    <li><a href="/admin/list"><span>患者记录</span></a></li>
+    <li><a href="/admin/record"><span>患者随访记录</span></a></li>
+   
+
+    <!--<li class="content"> <span>内存使用率</span>-->
+      <!--<div class="progress progress-mini progress-danger active progress-striped">-->
+        <!--<div style="width: 0%;" class="bar" id="minfowidth"></div>-->
+      <!--</div>-->
+      <!--<span class="percent" id="minfo">0%</span>-->
+      <!--<div class="stat" id="minfot">请等待……</div>-->
+    <!--</li>-->
+    <!--<li class="content"> <span>磁盘使用率</span>-->
+      <!--<div class="progress progress-mini active progress-striped">-->
+        <!--<div style="width: 0%;" class="bar" id="dinfowidth"></div>-->
+      <!--</div>-->
+      <!--<span class="percent" id="dinfo">0%</span>-->
+      <!--<div class="stat" id="dinfot">请等待……</div>-->
+    <!--</li>-->
+    <script>
+    	//getinfo();
+
+    	function getinfo(){
+	    	setTimeout(function () {
+	    		$.get("/admin/systeminfo",function(data){
+
+                wait_time = 3000;
+	             	  var s = "";
+
+                  s = (((data.totalMemory - data.freeMemory) / data.totalMemory).toFixed(2) * 100).toFixed(0)  + "%";
+	               	document.getElementById("minfot").innerText=(data.totalMemory - data.freeMemory).toFixed(2)+" MB / "+data.totalMemory.toFixed(2)+" MB";
+	               	document.getElementById("minfo").innerText=s;
+	               	document.getElementById("minfowidth").style.width=s;
+
+	               	s = (((data.totaldisk - data.freedisk) / data.totaldisk).toFixed(2) * 100).toFixed(0)  + "%";
+	               	document.getElementById("dinfot").innerText=(data.totaldisk - data.freedisk).toFixed(2)+" GB / "+data.totaldisk.toFixed(2)+" GB";
+	                document.getElementById("dinfo").innerText=s;
+	               	document.getElementById("dinfowidth").style.width=s;
+
+	                getinfo();
+	           },"json");
+	    	}, wait_time);
+    	}
+
+
+      //getmsg();
+
+      var wait_time=0;
+
+      function getmsg(){
+	    	setTimeout(function () {
+	    		$.get("/msgnum",function(data){
+
+                wait_time = 3000;
+
+                var msgtag = false;
+
+                if(msgtag){
+                  $.gritter.add({
+                        title:	'提示',
+                        text:	'您有未处理事项！请尽快处理。。。',
+                        sticky: false
+                      });
+                }
+
+	              getmsg();
+	           },"json");
+	    	}, wait_time);
+    	}
+
+
+    </script>
+  </ul>
+</div>
+<!--sidebar-menu-->

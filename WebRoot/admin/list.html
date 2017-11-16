@@ -1,0 +1,144 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>${softinfo.softinfo!}</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/css/bootstrap-responsive.min.css" />
+<link rel="stylesheet" href="/css/fullcalendar.css" />
+<link rel="stylesheet" href="/css/matrix-style.css" />
+<link rel="stylesheet" href="/css/matrix-media.css" />
+<link rel="stylesheet" href="/css/jquery.gritter.css" />
+<link rel="stylesheet" href="/css/style1.css" />
+</head>
+<body>
+
+<#include "inc/admin_header.html"/>
+
+<!-- 导航条 -->
+<!--main-container-part-->
+<div id="content">
+<!--breadcrumbs-->
+  <div id="content-header">
+    <div id="breadcrumb"> <a href="/user" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> 首页</a></div>
+  </div>
+<!--End-breadcrumbs-->
+
+
+  	<div class="widget-box" style="margin-left:1%;width:98%;">
+          <div class="widget-title">
+            <h5>${pagetitle!}</h5>
+            <div class="search-ground">
+            	<font color="red">*仅可通过用户名、住院号搜索</font>
+				<input type="text" id="searchtext" placeholder="输入搜索内容...">
+				<button  onclick="search()">搜索</button>
+			</div>
+          </div>
+          <div class="widget-content nopadding">
+            <table class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th>患者姓名</th>
+                  <th>性别</th>
+                  <th>年龄</th>
+                  <th>住院号</th>
+                  <th>主治医师</th>
+				  <th>婚姻状况</th>				
+                  <th>电话</th>			
+                  <th>住址</th>			
+                  <th>报销方式</th>		
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+             	<#list list.getList() as x>
+                <tr class="odd gradeX" style="text-align: center;">
+                
+                  <td style="text-align: center;">${x.name}</td>
+                  <td style="text-align: center;">
+                  
+                  <#if x.sex==0>男<#else>女</#if>
+                  </td>
+                  <td style="text-align: center;">${x.age}</td>
+                  <td style="text-align: center;">${x.number}</td>
+                  <td style="text-align: center;">${x.doct}</td>
+                  <td style="text-align: center;">${x.marryed}</td>
+                  <td style="text-align: center;">${x.tel}</td>
+                  <td style="text-align: center;">${x.address}</td>
+                  <td style="text-align: center;">
+					<#if x.reimbursement=='1'>社保
+					<#elseif x.reimbursement=='2'>农保
+					<#elseif x.reimbursement=='3'>工伤
+					<#elseif x.reimbursement=='4'>商报
+					<#elseif x.reimbursement=='5'>自费
+					</#if>
+				  </td>
+                  <td style="text-align: center;">
+                  	<a href="/admin/edit?id=${x.id}&type=1">编辑</a>&nbsp;&nbsp;
+                  	<a href="/admin/record?id=${x.id}">查看随访</a>&nbsp;&nbsp;
+                  </td>
+                </tr>
+                </#list>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+
+
+
+    <div style="width:98%;text-align:center;margin-top:10px;margin-left:1%;">
+    	<#include "/common/_paginate.html" />
+			<@paginate currentPage=list.pageNumber totalPage=list.totalPage actionUrl="/admin/list/" />
+	</div>
+  </div>
+</div>
+
+<!--end-main-container-part-->
+
+
+<script>
+
+	function del(id){
+		
+		if(window.confirm('你确认删除吗？')){
+    
+			$.post("/admin/del",{id:id,type:1},
+				function(data){
+			   	if(data.code=="200"){
+			   		alert(data.msg);
+					}
+					else{
+					alert(data.msg);
+					}
+					location.reload();
+			   	});
+			
+      return true;
+    }else{
+      return false;
+    }
+    }
+    function edit(id){
+		$.post("/admin/edit",{id:id,type:1});
+	}
+
+		
+	function search(){
+		if($("#searchtext").val()==""||undefined==$("#searchtext").val()||null==$("#searchtext").val()){
+			alert("请输入要搜索的内容！");
+		}
+		location.href="/admin/search?search="+$("#searchtext").val();
+    }
+	
+</script>
+
+
+
+
+<#include "inc/admin_footer.html"/>
+
+</body>
+</html>

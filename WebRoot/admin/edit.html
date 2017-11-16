@@ -1,0 +1,106 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>${softinfo.softinfo!}</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/css/bootstrap-responsive.min.css" />
+<link rel="stylesheet" href="/css/fullcalendar.css" />
+<link rel="stylesheet" href="/css/matrix-style.css" />
+<link rel="stylesheet" href="/css/matrix-media.css" />
+<link rel="stylesheet" href="/css/jquery.gritter.css" />
+</head>
+<body>
+
+<#include "inc/admin_header.html"/>
+
+<!-- 导航条 -->
+<!--main-container-part-->
+<div id="content">
+<!--breadcrumbs-->
+  <div id="content-header">
+    <div id="breadcrumb"> <a href="/" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> 首页</a></div>
+  </div>
+    <div class="widget-box" style="width:98%;margin-left:1%;">
+        <div class="widget-title"> 
+          <h5>编辑</h5>
+        </div>
+        <div class="widget-content nopadding">
+          <form action="doedit" method="post" class="form-horizontal" id="form">
+          <input style="display: none" value="1" name="type"/>
+          <input style="display: none" value="${info.id!}" name="dao.id" id="id"/>
+            <div class="control-group">
+              <label class="control-label">姓名 :</label>
+              <div class="controls">
+                <input type="text" class="span6" id="name" name="dao.name" value=${info.name!}>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label">性别 :</label>
+              <div class="controls">
+                <select type="text" class="span6" name="dao.sex" id="sex" >
+                	<option value="0" id="sex0">男</option>
+                	<option value="1" id="sex1">女</option>
+               	</select>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label">年龄:</label>
+              <div class="controls">
+                <input type="text" class="span6" name="dao.age" id="age" value=${info.age!}>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label">住址:</label>
+              <div class="controls">
+                <input type="text" class="span6" name="dao.address" id="address" value=${info.address!}> 
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label">手机号:</label>
+              <div class="controls">
+                <input type="text" class="span6" name="dao.tel" id="tel" value=${info.tel!}> 
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label">主治医师:</label>
+              <div class="controls">
+                <input type="text" class="span6" name="dao.doct" id="doct" value=${info.doct!}> 
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label">婚姻状态:</label>
+              <div class="controls">
+                <input type="text" class="span6" name="dao.marryed" id="marryed" value=${info.marryed!}>
+              </div>
+            </div>
+          
+            <div class="form-actions">
+              <button type="button" class="btn btn-success" onclick="sub();">保存</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      
+      <script language="javascript">
+      var sex = ${info.sex!}
+      document.getElementById("sex"+sex).selected = true;
+      
+      function sub(){
+      	document.getElementById("form").submit();
+      }
+      </script>
+
+    
+  </div>
+</div>
+
+<!--end-main-container-part-->
+
+<#include "inc/admin_footer.html"/>
+
+</body>
+</html>
+

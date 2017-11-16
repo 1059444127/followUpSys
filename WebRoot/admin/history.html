@@ -1,0 +1,122 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>${softinfo.softinfo!}</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/css/bootstrap-responsive.min.css" />
+<link rel="stylesheet" href="/css/fullcalendar.css" />
+<link rel="stylesheet" href="/css/matrix-style.css" />
+<link rel="stylesheet" href="/css/matrix-media.css" />
+<link rel="stylesheet" href="/css/jquery.gritter.css" />
+<link rel="stylesheet" href="/css/style1.css" />
+</head>
+<body>
+
+<#include "inc/admin_header.html"/>
+
+<!-- 导航条 -->
+<!--main-container-part-->
+<div id="content">
+<!--breadcrumbs-->
+  <div id="content-header">
+    <div id="breadcrumb"> <a href="/" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> 首页</a></div>
+  </div>
+<!--End-breadcrumbs-->
+
+
+	<#include "inc/adminadd.html"/>
+
+
+
+  	<div class="widget-box" style="margin-left:1%;width:98%;">
+          <div class="widget-title">
+            <h5>${pagetitle!}</h5>
+          </div>
+          <div class="widget-content nopadding">
+            <table class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th>住院号</th>
+                  <th>患者姓名</th>
+                  <th>诊断</th>
+                  <th>主诉</th>
+                  <th>专科检查</th>			
+                  <th>治疗方式</th>	
+				  <th width="10%">治疗时间</th>			
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+             	<#list history.getList() as x>
+                <tr class="odd gradeX" style="text-align: center;">
+                
+                  <td style="text-align: center;">${x.number!}</td>
+                  <td style="text-align: center;">${x.name!}</td>
+                  <td style="text-align: center;">${x.zhenduan!}</td>
+                  <td style="text-align: center;">${x.zhusu!}</td>
+                  <td style="text-align: center;">${x.zkjc!}</td>
+                  <td style="text-align: center;">${x.zlfs!}</td>
+                  <td style="text-align: center;">${x.time!}</td>
+                  <td style="text-align: center;">
+                  	<a href="/admin/edit?id=${x.id!}&type=2">编辑</a>&nbsp;&nbsp;
+                  	<a href="javascript:del(${x.id!});">删除</a>&nbsp;&nbsp;
+                  </td>
+                </tr>
+                </#list>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+
+
+
+    <div style="width:98%;text-align:center;margin-top:10px;margin-left:1%;">
+    	<#include "/common/_paginate.html" />
+			<@paginate currentPage=history.pageNumber totalPage=history.totalPage actionUrl="/admin/history/" />
+	</div>
+  </div>
+</div>
+
+<!--end-main-container-part-->
+
+
+<script>
+
+	function del(id){
+		
+		if(window.confirm('你确认删除吗？')){
+    
+			$.post("/admin/del",{id:id,type:2},
+				function(data){
+			   	if(data.code=="200"){
+			   		alert(data.msg);
+					}
+					else{
+					alert(data.msg);
+					}
+					location.reload();
+			   	});
+			
+      return true;
+    }else{
+      return false;
+    }
+    }
+    function edit(id){
+		$.post("/admin/edit",{id:id,type:2});
+	}
+
+
+</script>
+
+
+
+
+<#include "inc/admin_footer.html"/>
+
+</body>
+</html>

@@ -1,0 +1,170 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>${softinfo.softinfo!}</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/css/bootstrap-responsive.min.css" />
+<link rel="stylesheet" href="/css/fullcalendar.css" />
+<link rel="stylesheet" href="/css/matrix-style.css" />
+<link rel="stylesheet" href="/css/matrix-media.css" />
+<link rel="stylesheet" href="/css/jquery.gritter.css" />
+</head>
+<body>
+
+<#include "inc/admin_header.html"/>
+
+<!-- 导航条 -->
+<!--main-container-part-->
+<div id="content">
+<!--breadcrumbs-->
+  <div id="content-header">
+    <div id="breadcrumb"> <a href="/" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> 首页</a></div>
+  </div>
+    <div class="widget-box" style="width:98%;margin-left:1%;">
+        <div class="widget-title"> 
+          <h5>编辑</h5>
+        </div>
+        <div class="widget-content nopadding">
+          <form action="doedit" method="post" class="form-horizontal" id="form">
+          <input style="display: none" value="2" name="type"/>
+          <input style="display: none" value="${info.id!}" name="dao.id" id="id"/>
+           <div class="control-group">
+              <label class="control-label">姓名 :</label>
+              <div class="controls">
+                <select type="text" class="span6" name="dao.patientid" id="patientid">
+                	<#list patient as x>
+                	<option value="${x.id!}" id="patientid${x.id!}">${x.name!}</option>
+                	</#list>
+               	</select>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label">诊断:</label>
+              <div class="controls">
+                <input type="text" class="span6" name="dao.zhenduan" id="zhenduan" value="${info.zhenduan!}"> 
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label">主诉:</label>
+              <div class="controls">
+                <input type="text" class="span6" name="dao.zhusu" id="zhusu" value="${info.zhusu!}"> 
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label">专科检查:</label>
+              <div class="controls">
+                <input type="text" class="span6" name="dao.zkjc" id="zkjc" value="${info.zkjc!}"> 
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label">治疗方式:</label>
+              <div class="controls">
+                <input type="text" class="span6" name="dao.zlfs" id="zlfs" value="${info.zlfs!}"> 
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label">辅助检查:</label>
+              <div class="controls" style="display: none">
+                <input type="file" id="file" multiple="multiple" name="file" onchange="uploadImage(this);">
+                <input type="text" class="span6" name="dao.img0" id="img0">
+                <input type="text" class="span6" name="dao.img1" id="img1">
+                <input type="text" class="span6" name="dao.img2" id="img2">
+              </div>
+              <img src="/img/add2.png" style="width:120px;height:120px;margin-left:40px" id="fimg0" onclick="$('#file').click();">
+              
+              <img src="/img/add2.png" style="display: none;width:120px;height:120px;margin-left:40px" id="fimg1" onclick="$('#file').click();">
+              
+              <img src="/img/add2.png" style="display: none;width:120px;height:120px;margin-left:40px" id="fimg2" onclick="$('#file').click();">
+              <font color="red" id="msg"></font>
+            </div>
+            <div class="control-group">
+              <label class="control-label">既往史:</label>
+              <div class="controls">
+                <input type="text" class="span6" name="dao.jws" id="jws" value="${info.jws!}"> 
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label">所属科室:</label>
+              <div class="controls">
+                <select type="text" class="span6" name="dao.departmentid" id="departmentid">
+                	<#list ks as x>
+                	<option value="${x.id!}" id="departmentid${x.id!}">${x.reimbursementname!}</option>
+                	</#list>
+               	</select>
+              </div>
+            </div>
+          
+            <div class="form-actions">
+              <button type="button" class="btn btn-success" onclick="sub();">保存</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      
+      <script language="javascript">
+      var patientid = ${info.patientid!};
+      var departmentid = ${info.departmentid!};
+      document.getElementById("patientid"+patientid).selected = true;
+      document.getElementById("departmentid"+departmentid).selected = true;
+      
+      function sub(){
+      	document.getElementById("form").submit();
+      }
+      function uploadImage(){
+      //判断是否有选择上传文件
+              var imgPath = $("#file").val();
+              if (imgPath == "") {
+                  alert("请选择上传图片！");
+                  return;
+              }
+              //判断上传文件的后缀名
+              var strExtension = imgPath.substr(imgPath.lastIndexOf('.') + 1);
+              if (strExtension != 'jpg' && strExtension != 'gif'
+              && strExtension != 'png' && strExtension != 'bmp') {
+                  alert("请选择图片文件");
+                  return;
+              }
+
+			  var formData = new FormData();
+              formData.append('file', $('#file')[0].files[0]);
+			  console.log($('#file')[0].files[0]);
+              $("#msg").html("图片正在上传，请稍候……");
+
+              $.ajax({
+                url: "/admin/imageUpload",
+                type: 'POST',
+                cache: false,
+                data: formData,
+                processData: false,
+                contentType: false,
+            }).done(function(res) {
+              if(res.code=="200"){
+                  $("#msg").html("图片上传成功");
+                 
+                  document.getElementById("fimg").src=res.src;
+                  document.getElementById("img").value=res.src;
+
+              }
+            }).fail(function(res) {
+                alert("上传失败，请检查网络后重试");
+            },"json");
+            
+            console.log(document.getElementById("img").value);
+      	
+      };
+      </script>
+
+    
+  </div>
+</div>
+
+<!--end-main-container-part-->
+
+<#include "inc/admin_footer.html"/>
+
+</body>
+</html>
+

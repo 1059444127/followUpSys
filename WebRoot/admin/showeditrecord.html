@@ -1,0 +1,529 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>${softinfo.softinfo!}</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/css/bootstrap-responsive.min.css" />
+<link rel="stylesheet" href="/css/fullcalendar.css" />
+<link rel="stylesheet" href="/css/matrix-style.css" />
+<link rel="stylesheet" href="/css/matrix-media.css" />
+<link rel="stylesheet" href="/css/jquery.gritter.css" />
+<link rel="stylesheet" href="/css/lightbox.css" />
+<script type="text/javascript" src="/js/laydate.js"></script>
+</head>
+<body>
+
+<#include "inc/admin_header.html"/>
+
+<!-- 导航条 -->
+<!--main-container-part-->
+<div id="content">
+<!--breadcrumbs-->
+  <div id="content-header">
+    <div id="breadcrumb"> <a href="/" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> 首页</a></div>
+  </div>
+    <div class="widget-box" style="width:98%;margin-left:1%;">
+        <div class="widget-title"> 
+          <h5>患者信息</h5>
+        </div>
+        <div class="widget-content nopadding">
+        <form action="doadd" method="post" class="form-horizontal" id="list">
+          <input style="display: none" value="${type!}" name="type" id="type"/>
+            <div class="control-group ">
+              <label class="control-label ">姓名 :</label>
+              <div class="controlsfloat" >
+                <input type="text" class="span2 " id="name" name="dao.name">
+              </div>
+              <label class="control-label">性别 :</label>
+              <div class="controlsfloat ">
+                <select type="text" class="span2" name="dao.sex" id="sex" >
+                	<option value="0">男</option>
+                	<option value="1">女</option>
+               	</select>
+              </div>
+              <label class="control-label">年龄:</label>
+              <div class="controlsfloat ">
+                <input type="text" class="span1" name="dao.age" id="age"> 
+              </div>
+              <label class="control-label">住院号:</label>
+              <div class="controlsfloat ">
+                <input type="text" class="span1" name="dao.number" id="number"> 
+              </div>
+              
+              <div style="clear: both"></div>
+              
+              <label class="control-label">主治医师:</label>
+              <div class="controlsfloat ">
+                <input type="text" class="span2" name="dao.doct" id="doct"> 
+              </div>
+              <label class="control-label">住址:</label>
+              <div class="controlsfloat ">
+                <input type="text" class="span2" name="dao.address" id="address"> 
+              </div>
+              <label class="control-label">手机号:</label>
+              <div class="controlsfloat ">
+                <input type="text" class="span2" name="dao.tel" id="tel"> 
+              </div>
+              
+               <div style="clear: both"></div>
+               
+              <label class="control-label">报销方式:</label>
+              <div class="controlsfloat ">
+              	<select type="text" class="span2" name="dao.reimbursement" id="reimbursement">
+                	<#list reimbursement as x>
+                	<option value="${x.id!}">${x.name!}</option>
+                	</#list>
+               	</select>
+              </div>
+              <label class="control-label">婚姻状态:</label>
+              <div class="controlsfloat ">
+                <input type="text" class="span2" name="dao.marryed" id="marryed"> 
+              </div>
+              <label class="control-label">所属科室:</label>
+              <div class="controlsfloat ">
+                <select type="text" class="span2" name="dao.departmentid" id="departmentid">
+                	<#list ks as x>
+                	<option value="${x.id!}">${x.reimbursementname!}</option>
+                	</#list>
+               	</select>
+              </div>
+            </div>
+            
+         
+        
+          <div class="widget-title"> 
+	          <h5>患者病史</h5>
+	      </div>
+            
+              <label class="control-label">诊断:</label>
+              <div class="controls">
+                <textarea  class="span8" name="dao.zhenduan" id="zhenduan"></textarea> 
+              </div>
+            
+            
+              <label class="control-label">主诉:</label>
+              <div class="controls">
+                <textarea  class="span8" name="dao.zhusu" id="zhusu"></textarea> 
+              </div>
+            
+            
+              <label class="control-label">专科检查:</label>
+              <div class="controls">
+                <textarea class="span8" name="dao.zkjc" id="zkjc"></textarea> 
+              </div>
+            
+           
+              <label class="control-label">治疗方式:</label>
+              <div class="controls">
+                <textarea class="span8" name="dao.zlfs" id="zlfs"></textarea> 
+              </div>
+            
+           	  <label class="control-label">治疗日期:</label>
+              <div class="controls"> 
+                <input placeholder="请输入日期" class="laydate-icon "  name="dao.zltime" id="zltime" onClick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+              </div>
+            
+              <label class="control-label">辅助检查:</label>
+              <div class="controls" style="display: none;">
+                <input type="file" id="file" multiple="multiple" name="file" onchange="uploadImage(this);">
+                <input type="text" class="span6" name="dao.img0" id="img0">
+                <input type="text" class="span6" name="dao.img1" id="img1">
+                <input type="text" class="span6" name="dao.img2" id="img2">
+                <input type="text" class="span6" name="dao.img3" id="img3">
+              </div>
+              <div id="lightbox_2">
+			    <img src="/img/add2.png" alt="#" style="display: none;width:120px;height:120px;margin-left:40px" id="fimg0" class="lightbox-pic" data-role="lightbox" data-source="" data-group="group-2" data-id="pic_2_1" data-caption="pic_2_1">
+			    <img src="/img/add2.png" alt="#" style="display: none;width:120px;height:120px;margin-left:40px" id="fimg1" class="lightbox-pic" data-role="lightbox" data-source="" data-group="group-2" data-id="pic_2_2" data-caption="pic_2_2">
+			    <img src="/img/add2.png" alt="#" style="display: none;width:120px;height:120px;margin-left:40px" id="fimg2" class="lightbox-pic" data-role="lightbox" data-source="" data-group="group-2" data-id="pic_2_3" data-caption="pic_2_3">
+			    <img src="/img/add2.png" alt="#" style="display: none;width:120px;height:120px;margin-left:40px" id="fimg3" class="lightbox-pic" data-role="lightbox" data-source="" data-group="group-2" data-id="pic_2_4" data-caption="pic_2_4">
+			  </div>
+              <font color="red" id="msg"></font>
+              
+            <div id="lightbox_mask"></div>
+			  <div id="lightbox_popup">
+			    <div class="pic-view">
+			      <img src="images/1-2.png" alt="#" class="pic">
+			    </div>
+			    <div class="btn-view">
+			      <a href="#" class="btn btn-close">×</a>
+			    </div>
+			    
+			  </div>
+            <br>
+            <div class="control-group">
+              <label class="control-label">既往史:</label>
+              <div class="controls">
+                <textarea class="span8" name="dao.jws" id="jws"></textarea> 
+              </div>
+             </div>
+            </form>
+          <#list info as i>
+          <#if info?size!=i_index+1!>
+           <form  class="form-horizontal" >
+          <div class="widget-title"> 
+          	<h5>患者随访记录</h5>
+       	  </div>
+       	  
+           <div class="control-group">
+            
+           
+              <label class="control-label">复诊方式:</label>
+              <div class="controls">
+                <select type="text" class="span6" id="sfmode${i_index!}">
+                	
+                	<option value="0" >电话随访</option>
+                	<option value="1" >门诊复诊</option>
+                	
+               	</select>
+              </div>
+           
+              <label class="control-label">复诊情况:</label>
+              <div class="controls">
+                <textarea class="span6" readonly="readonly">${i.fs!}</textarea> 
+              </div>
+              <div class="controls">
+              <ul class="radio_fs">
+              	<li>
+	              	<label>CR片      
+		              	   <input name="${i.id!}cr" type="radio" value="0" />无
+		              	   <input name="${i.id!}cr" type="radio" value="1" />有
+	              	</label>
+              	</li>
+              	<li>
+	              	<label>外固定      
+		              	   <input name="${i.id!}fixed" type="radio" value="0" />无
+		              	   <input name="${i.id!}fixed" type="radio" value="1" />有
+	              	</label>
+              	</li>
+              	<li>
+	              	<label>外固定（松紧度调整 ）
+		              	   <input name="${i.id!}fixed1" type="radio" value="0" />无
+		              	   <input name="${i.id!}fixed1" type="radio" value="1" />有
+	              	</label>
+              	</li>
+              	<li>
+	              	<label>外固定（私自拆除）      
+		              	   <input name="${i.id!}fixed2" type="radio" value="0" />无
+		              	   <input name="${i.id!}fixed2" type="radio" value="1" />有
+	              	</label>
+              	</li>
+              	<li>
+	              	<label>肢体肿胀情况      
+		              	   <input name="${i.id!}pone" type="radio" value="0" />无 
+		              	   <input name="${i.id!}pone" type="radio" value="1" />有
+	              	</label>
+              	</li>
+              	<li>
+	              	<label>关节活动度     
+		              	    <input name="${i.id!}joint" type="radio" value="0" />无 
+		              	    <input name="${i.id!}joint" type="radio" value="1" />有
+	              	</label>
+              	</li>
+              	<li>
+              		<label>患肢负重或持重      
+						  
+						  <input name="${i.id!}weight" type="radio" value="0" />无
+						  <input name="${i.id!}weight" type="radio" value="1" />全部
+						  <input name="${i.id!}weight" type="radio" value="2" /> 部分
+				 	</label>
+				 </li>
+              </ul>
+              </div>
+           <script type="text/javascript">
+           	
+			for(var item in ${i.fscheck!}){
+				var itemv = ${i.fscheck!}[item];
+				document.getElementsByName("${i.id!}"+item)[itemv].checked = true;
+				}
+           </script>
+           
+              <label class="control-label">随访日期:</label>
+              <div class="controls"> 
+                <input placeholder="请输入日期" class="laydate-icon " value="${i.stime!}" readonly="readonly" onClick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+              </div>
+            </div>
+            <script language="javascript">
+		      document.getElementById("sfmode${i_index!}")[${i.sfmode!}].selected = true;
+	      </script>
+             </form>
+          
+          <#else>
+          <form action="doedit" method="post" class="form-horizontal" id="form">
+          <div class="widget-title"> 
+          	<h5>患者随访记录</h5>
+       	  </div>
+       	  
+          <input style="display: none" value="3" name="type"/>
+          <input style="display: none" value="${i.id!}" name="dao.id" id="id"/>
+           <div class="control-group">
+              <label class="control-label">姓名 :</label>
+              <div class="controls">
+                <select type="text" class="span6" name="dao.patientid" id="patientid" onchange="showinfo();">
+                	<#list patient as x>
+                	<option value="${x.id!}" id="patientid${x.id!}">${x.name!}</option>
+                	</#list>
+               	</select>
+              </div>
+           
+              <label class="control-label">复诊方式:</label>
+              <div class="controls">
+                <select type="text" class="span6" name="dao.sfmode" id="sfmode${i_index!}">
+                	
+                	<option value="0" >电话随访</option>
+                	<option value="1" >门诊复诊</option>
+                	
+               	</select>
+              </div>
+           
+              <label class="control-label">复诊情况:</label>
+              <div class="controls">
+                <textarea class="span6"  name="dao.fs" id="fs">${i.fs!}</textarea> 
+              </div>
+              <div class="controls">
+              <ul class="radio_fs">
+              	<li>
+	              	<label>CR片      
+		              	   <input name="${i.id!}cr" type="radio" value="0" />无
+		              	   <input name="${i.id!}cr" type="radio" value="1" />有
+	              	</label>
+              	</li>
+              	<li>
+	              	<label>外固定      
+		              	   <input name="${i.id!}fixed" type="radio" value="0" />无
+		              	   <input name="${i.id!}fixed" type="radio" value="1" />有
+	              	</label>
+              	</li>
+              	<li>
+	              	<label>外固定（松紧度调整 ）
+		              	   <input name="${i.id!}fixed1" type="radio" value="0" />无
+		              	   <input name="${i.id!}fixed1" type="radio" value="1" />有
+	              	</label>
+              	</li>
+              	<li>
+	              	<label>外固定（私自拆除）      
+		              	   <input name="${i.id!}fixed2" type="radio" value="0" />无
+		              	   <input name="${i.id!}fixed2" type="radio" value="1" />有
+	              	</label>
+              	</li>
+              	<li>
+	              	<label>肢体肿胀情况      
+		              	   <input name="${i.id!}pone" type="radio" value="0" />无 
+		              	   <input name="${i.id!}pone" type="radio" value="1" />有
+	              	</label>
+              	</li>
+              	<li>
+	              	<label>关节活动度     
+		              	    <input name="${i.id!}joint" type="radio" value="0" />无 
+		              	    <input name="${i.id!}joint" type="radio" value="1" />有
+	              	</label>
+              	</li>
+              	<li>
+              		<label>患肢负重或持重      
+						  
+						  <input name="${i.id!}weight" type="radio" value="0" />无
+						  <input name="${i.id!}weight" type="radio" value="1" />全部
+						  <input name="${i.id!}weight" type="radio" value="2" /> 部分
+				 	</label>
+				 </li>
+              </ul>
+              </div>
+           <script type="text/javascript">
+           	
+			for(var item in ${i.fscheck!}){
+				var itemv = ${i.fscheck!}[item];
+				document.getElementsByName("${i.id!}"+item)[itemv].checked = true;
+				}
+           </script>
+           
+           
+              <label class="control-label">随访日期:</label>
+              <div class="controls"> 
+                <input placeholder="请输入日期" class="laydate-icon " value="${i.stime!}" name="dao.stime" id="stime" onClick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+              </div>
+            </div>
+           
+            <script language="javascript">
+		      var patientid = ${i.patientid!};
+		      var departmentid = ${i.departmentid!};
+		      document.getElementById("sfmode${i_index!}")[${i.sfmode!}].selected = true;
+		      document.getElementById("patientid"+patientid).selected = true;
+		      document.getElementById("departmentid"+departmentid).selected = true;
+	      </script>
+             </form>
+              <div class="form-actions">
+              <#if i.istrue==0>
+              <button  class="btn btn-success" onclick="javascript:done(${i.id!});">完成本次随访</button>
+              <#else>
+              <button  class="btn" onclick="javascript:done(${i.id!});">完成本次随访</button>
+              </#if>
+              
+              <button  class="btn btn-success" onclick="javascript:add(${i.id!});">添加下次随访</button>
+            </div>
+             </#if>
+            </#list>
+	    	
+         
+        </div>
+      </div>
+      
+      <script type="text/javascript">
+		!function(){
+			laydate.skin('yahui');//切换皮肤，请查看skins下面皮肤库
+			laydate({elem: '#demo'});//绑定元素
+		}();
+		laydate(start);
+		laydate(end);
+		
+		</script>
+     
+      <script language="javascript">
+      
+      function checks(name)
+	    {
+	        var radios=document.getElementsByName(name);
+	        for(var i=0;i<radios.length;i++)
+	        {
+	            if(radios[i].checked==true)
+	            {
+	                return radios[i].value;
+	            }
+	        }
+	    }
+      
+        function done(id){
+		var crv=checks(id+"cr");
+		var jointv=checks(id+"joint");
+		var weightv=checks(id+"weight");
+		var fixedv=checks(id+"fixed");
+		var fixed1v=checks(id+"fixed1");
+		var fixed2v=checks(id+"fixed2");
+		var ponev=checks(id+"pone");
+		var json = {"cr":crv,"joint":jointv,"weight":weightv,"fixed":fixedv,"fixed1":fixed1v,"fixed2":fixed2v,"pone":ponev};
+		if(window.confirm('完成本次随访？')){
+			$.post("/admin/done",{id:id,type:3,sf:$('#fs').val(),data:JSON.stringify(json),},
+				function(data){
+			   	if(data.code=="200"){
+			   		alert(data.msg);
+					location.reload();
+					}
+					else{
+					alert(data.msg);
+					location.reload();
+					}
+					   	});
+		    }else{
+		      return false;
+		    }
+    }
+
+    function add(id){
+    
+		window.location.href="/admin/edit?id="+id+"&type=4";
+			
+    }
+    
+      showinfo();
+      function showinfo(){
+    		document.getElementById("patientid").disabled=true;
+              var id = $("#patientid").val();
+              
+              
+
+              $.ajax({
+                url: "/admin/ser?id="+id,
+                type: 'POST',
+                cache: false,
+                data: id,
+                processData: false,
+                contentType: false,
+            }).done(function(res) {
+              if(res!=""){
+                 document.getElementById("name").value=res.name;
+                 document.getElementById("sex").value=res.sex;
+                 document.getElementById("age").value=res.age;
+                 document.getElementById("number").value=res.number;
+                 document.getElementById("doct").value=res.doct;
+                 document.getElementById("address").value=res.address;
+                 document.getElementById("tel").value=res.tel;
+                 document.getElementById("reimbursement").value=res.reimbursement;
+                 document.getElementById("marryed").value=res.marryed;
+                 document.getElementById("departmentid").value=res.departmentid;
+                 document.getElementById("zhenduan").value=res.zhenduan;
+                 document.getElementById("zhusu").value=res.zhusu;
+                 document.getElementById("zkjc").value=res.zkjc;
+                 document.getElementById("zlfs").value=res.zlfs;
+                 document.getElementById("zltime").value=res.zltime;
+                 document.getElementById("jws").value=res.jws;
+                 if(res.img0!=null&&res.img0!=""){
+                 	document.getElementById("fimg0").src=res.img0;
+                 	$("#fimg0").attr('data-source',res.img0);
+	                document.getElementById("fimg0").style.display="inline-block";
+	           
+                 }else{
+                 	document.getElementById("fimg0").style.display="inline-block";
+                 }
+                 if(res.img1!=null&&res.img1!=""){
+	                 document.getElementById("fimg1").src=res.img1;
+                 	 $("#fimg1").attr('data-source',res.img1);
+	                 document.getElementById("fimg1").style.display="inline-block";
+	             
+                 }
+                 if(res.img2!=null&&res.img2!=""){
+	                 document.getElementById("fimg2").src=res.img2;
+                 	 $("#fimg2").attr('data-source',res.img2);
+	                 document.getElementById("fimg2").style.display="inline-block";
+	                
+                 }
+                 if(res.img3!=null&&res.img3!=""){
+	                 document.getElementById("fimg3").src=res.img3;
+                 	 $("#fimg3").attr('data-source',res.img3);
+	                 document.getElementById("fimg3").style.display="inline-block";
+	                
+                 }
+                 document.getElementById("name").readOnly=true;
+                 document.getElementById("sex").disabled=true;
+                 document.getElementById("age").readOnly=true;
+                 document.getElementById("number").readOnly=true;
+                 document.getElementById("doct").readOnly=true;
+                 document.getElementById("address").readOnly=true;
+                 document.getElementById("tel").readOnly=true;
+                 document.getElementById("reimbursement").disabled=true;
+                 document.getElementById("marryed").readOnly=true;
+                 document.getElementById("departmentid").disabled=true;
+                 document.getElementById("zhenduan").readOnly=true;
+                 document.getElementById("zhusu").readOnly=true;
+                 document.getElementById("zkjc").readOnly=true;
+                 document.getElementById("zlfs").readOnly=true;
+                 document.getElementById("zltime").readOnly=true;
+                 document.getElementById("jws").readOnly=true;
+              }
+              else{
+              	alert("请检查网络后重试");
+              }
+            }).fail(function(res) {
+            	alert("请检查网络后重试");
+            },"json");
+      	
+      };
+      </script>
+
+    
+  </div>
+</div>
+  <script src="/js/jquery.min.js"></script>
+  <script src="/js/lightbox.js"></script>
+  <script>
+    $(function () {
+      $('#lightbox_2').lightbox();
+    });
+  </script>
+<!--end-main-container-part-->
+
+<#include "inc/admin_footer.html"/>
+
+</body>
+</html>
+

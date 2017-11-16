@@ -1,0 +1,503 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>${softinfo.softinfo!}</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/css/bootstrap-responsive.min.css" />
+<link rel="stylesheet" href="/css/fullcalendar.css" />
+<link rel="stylesheet" href="/css/matrix-style.css" />
+<link rel="stylesheet" href="/css/matrix-media.css" />
+<link rel="stylesheet" href="/css/jquery.gritter.css" />
+<link rel="stylesheet" href="/css/lightbox.css" />
+<meta http-equiv="Content-Type" content="multipart/form-data;">
+<script type="text/javascript" src="/js/laydate.js"></script>
+</head>
+<body>
+
+<#include "inc/admin_header.html"/>
+
+<!-- 导航条 -->
+<!--main-container-part-->
+<div id="content">
+<!--breadcrumbs-->
+  <div id="content-header">
+    <div id="breadcrumb"> <a href="/" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> 首页</a></div>
+  </div>
+    <div class="widget-box" style="width:98%;margin-left:1%;">
+        <div class="widget-title"> 
+          <h5>患者基本信息</h5>
+        </div>
+        <div class="widget-content nopadding">
+          <form action="doadd" method="post" class="form-horizontal" id="list">
+          <input style="display: none" value="${type!}" name="type" id="type"/>
+            <div class="control-group ">
+              <label class="control-label ">姓名 :</label>
+              <div class="controlsfloat" >
+                <input type="text" class="span2 " id="name" name="dao.name">
+              </div>
+              <label class="control-label">性别 :</label>
+              <div class="controlsfloat ">
+                <select type="text" class="span2" name="dao.sex" id="sex" >
+                	<option value="0">男</option>
+                	<option value="1">女</option>
+               	</select>
+              </div>
+              <label class="control-label">年龄:</label>
+              <div class="controlsfloat ">
+                <input type="text" class="span1" name="dao.age" id="age"> 
+              </div>
+              <label class="control-label">住院号:</label>
+              <div class="controlsfloat ">
+                <input type="text" class="span1" name="dao.number" id="number"> 
+              </div>
+              
+              <div style="clear: both"></div>
+              
+              <label class="control-label">主治医师:</label>
+              <div class="controlsfloat ">
+                <input type="text" class="span2" name="dao.doct" id="doct"> 
+              </div>
+              <label class="control-label">住址:</label>
+              <div class="controlsfloat ">
+                <input type="text" class="span2" name="dao.address" id="address"> 
+              </div>
+              <label class="control-label">手机号:</label>
+              <div class="controlsfloat ">
+                <input type="text" class="span2" name="dao.tel" id="tel"> 
+              </div>
+              
+               <div style="clear: both"></div>
+               
+              <label class="control-label">报销方式:</label>
+              <div class="controlsfloat ">
+              	<select type="text" class="span2" name="dao.reimbursement" id="reimbursement">
+                	<#list reimbursement as x>
+                	<option value="${x.id!}">${x.name!}</option>
+                	</#list>
+               	</select>
+              </div>
+              <label class="control-label">婚姻状态:</label>
+              <div class="controlsfloat ">
+                <input type="text" class="span2" name="dao.marryed" id="marryed"> 
+              </div>
+              <label class="control-label">所属科室:</label>
+              <div class="controlsfloat ">
+                <select type="text" class="span2" name="dao.departmentid" id="departmentid">
+                	<#list ks as x>
+                	<option value="${x.id!}">${x.reimbursementname!}</option>
+                	</#list>
+               	</select>
+              </div>
+            </div>
+            
+         
+        
+          <div class="widget-title"> 
+	          <h5>患者病史采集</h5>
+	      </div>
+          
+          <input style="display: none" value="${type!}" name="type" id="type"/>
+            
+            
+              <label class="control-label">诊断:</label>
+              <div class="controls">
+                <textarea  class="span8" name="dao.zhenduan" id="zhenduan"></textarea> 
+              </div>
+            
+            
+              <label class="control-label">主诉:</label>
+              <div class="controls">
+                <textarea  class="span8" name="dao.zhusu" id="zhusu"></textarea> 
+              </div>
+            
+            
+              <label class="control-label">专科检查:</label>
+              <div class="controls">
+                <textarea class="span8" name="dao.zkjc" id="zkjc"></textarea> 
+              </div>
+            
+           
+              <label class="control-label">治疗方式:</label>
+              <div class="controls">
+                <textarea class="span8" name="dao.zlfs" id="zlfs"></textarea> 
+              </div>
+            
+           	  <label class="control-label">治疗日期:</label>
+              <div class="controls"> 
+                <input placeholder="请输入日期" class="laydate-icon "  name="dao.zltime" id="zltime" onClick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+              </div>
+            
+              <label class="control-label">辅助检查:</label>
+              <div class="controls" style="display: none">
+                <input type="file" id="file" multiple="multiple" name="file" onchange="uploadImage(this);">
+                <input type="text" class="span6" name="dao.img0" id="img0">
+                <input type="text" class="span6" name="dao.img1" id="img1">
+                <input type="text" class="span6" name="dao.img2" id="img2">
+              </div>
+              <div id="lightbox_2">
+              <img src="/img/add2.png" style="width:120px;height:120px;margin-left:40px" id="fimg0" onclick="$('#file').click();" class="lightbox-pic" data-role="lightbox" data-source="" data-group="group-2" data-id="pic_2_1" data-caption="pic_2_1">
+              
+              <img src="/img/add2.png" style="display: none;width:120px;height:120px;margin-left:40px" id="fimg1" onclick="$('#file').click();" class="lightbox-pic" data-role="lightbox" data-source="" data-group="group-2" data-id="pic_2_2" data-caption="pic_2_2">
+              
+              <img src="/img/add2.png" style="display: none;width:120px;height:120px;margin-left:40px" id="fimg2" onclick="$('#file').click();" class="lightbox-pic" data-role="lightbox" data-source="" data-group="group-2" data-id="pic_2_3" data-caption="pic_2_3">
+              
+              <img src="/img/add2.png" style="display: none;width:120px;height:120px;margin-left:40px" id="fimg3" onclick="$('#file').click();" class="lightbox-pic" data-role="lightbox" data-source="" data-group="group-2" data-id="pic_2_4" data-caption="pic_2_4">
+            
+              <font color="red" id="msg"></font>
+                </div>
+            <div id="lightbox_mask"></div>
+			  <div id="lightbox_popup">
+			    <div class="pic-view">
+			      <img src="images/1-2.png" alt="#" class="pic">
+			    </div>
+			    <div class="btn-view">
+			      <a href="#" class="btn btn-close">×</a>
+			    </div>
+			    
+			  </div>
+            
+            <div class="control-group">
+              <label class="control-label">既往史:</label>
+              <div class="controls">
+                <textarea class="span8" name="dao.jws" id="jws"></textarea> 
+              </div>
+             </div>
+<!--             <div class="control-group"> -->
+<!--               <label class="control-label">所属科室:</label> -->
+<!--               <div class="controls"> -->
+<!--                 <select type="text" class="span6" name="dao.departmentid" id="departmentid"> -->
+<!--                 	<#list ks as x> -->
+<!--                 	<option value="${x.id!}">${x.reimbursementname!}</option> -->
+<!--                 	</#list> -->
+<!--                	</select> -->
+<!--               </div> -->
+<!--             </div> -->
+            </form>
+        
+          <form action="doadd" method="post" class="form-horizontal" id="record">
+          <div class="widget-title"> 
+          	<h5>患者随访记录</h5>
+       	  </div>
+          <input style="display: none" value="${type!}" name="type" id="type"/>
+            
+            <div class="control-group">
+              <label class="control-label">姓名 :</label>
+              <div class="controls">
+                <select type="text" class="span6" name="dao.patientid" id="patientid" onchange="showinfo();">
+                	<#list patient as x>
+                	<option value="${x.id!}">${x.name!}</option>
+                	</#list>
+               	</select>
+              </div>
+           
+              <label class="control-label">复诊方式:</label>
+              <div class="controls">
+                <select type="text" class="span6" name="dao.sfmode" id="sfmode">
+                	<option value="0">电话随访</option>
+                	<option value="1">门诊复诊</option>
+                	
+               	</select>
+              </div>
+           
+              <label class="control-label">复诊情况:</label>
+              <div class="controls">
+                <textarea class="span6" name="dao.fs" id="fs"></textarea> 
+               
+              </div>
+              <div class="controls">
+              <ul class="radio_fs">
+              	<li>
+	              	<label>CR片      
+		              	   <input name="cr" type="radio" value="0" />无
+		              	   <input name="cr" type="radio" value="1" />有
+	              	</label>
+              	</li>
+              	<li>
+	              	<label>外固定      
+		              	   <input name="fixed" type="radio" value="0" />无
+		              	   <input name="fixed" type="radio" value="1" />有
+	              	</label>
+              	</li>
+              	<li>
+	              	<label>外固定（松紧度调整 ）
+		              	   <input name="fixed1" type="radio" value="0" />无
+		              	   <input name="fixed1" type="radio" value="1" />有
+	              	</label>
+              	</li>
+              	<li>
+	              	<label>外固定（私自拆除）      
+		              	   <input name="fixed2" type="radio" value="0" />无
+		              	   <input name="fixed2" type="radio" value="1" />有
+	              	</label>
+              	</li>
+              	<li>
+	              	<label>肢体肿胀情况      
+		              	   <input name="pone" type="radio" value="0" />无 
+		              	   <input name="pone" type="radio" value="1" />有
+	              	</label>
+              	</li>
+              	<li>
+	              	<label>关节活动度     
+		              	    <input name="joint" type="radio" value="0" />无 
+		              	    <input name="joint" type="radio" value="1" />有
+	              	</label>
+              	</li>
+              	<li>
+              		<label>患肢负重或持重      
+						  
+						  <input name="weight" type="radio" value="0" />无
+						  <input name="weight" type="radio" value="1" />全部
+						  <input name="weight" type="radio" value="2" /> 部分
+				 	</label>
+				 </li>
+              </ul>
+              </div>
+          
+              <label class="control-label">所属科室:</label>
+              <div class="controls">
+                <select type="text" class="span6" name="dao.departmentid" id="departmentid">
+                	<#list ks as x>
+                	<option value="${x.id!}">${x.reimbursementname!}</option>
+                	</#list>
+               	</select>
+              </div>
+          
+              <label class="control-label">随访日期:</label>
+              <div class="controls"> 
+                <input placeholder="请输入日期" class="laydate-icon "  name="dao.stime" id="stime" onClick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+              </div>
+            </div>
+	        </form>
+	            
+            <div class="form-actions">
+              <button type="button" class="btn btn-success" onclick="sub();">保存</button>
+            </div>
+          
+        </div>
+      </div>
+      <script src="/js/jquery.min.js"></script>
+  <script src="/js/lightbox.js"></script>
+      <script type="text/javascript">
+		!function(){
+			laydate.skin('yahui');//切换皮肤，请查看skins下面皮肤库
+			laydate({elem: '#demo'});//绑定元素
+		}();
+		laydate(start);
+		laydate(end);
+		
+		</script>
+      <script language="javascript">
+      
+
+      var type = ${type!};
+      
+      
+      function uploadImage(objForm){
+      //判断是否有选择上传文件
+              var imgPath = $("#file").val();
+              if (imgPath == "") {
+                  alert("请选择上传图片！");
+                  return;
+              }
+              //判断上传文件的后缀名
+              var strExtension = imgPath.substr(imgPath.lastIndexOf('.') + 1);
+              if (strExtension != 'jpg' && strExtension != 'gif'
+              && strExtension != 'png' && strExtension != 'bmp') {
+                  alert("请选择图片文件");
+                  return;
+              }
+
+			  var formData = new FormData();
+			  
+			  var imglength = $('#file')[0].files.length;
+			  
+			  for(var i = 0;i<$('#file')[0].files.length;i++){
+			  	formData.append('file'+i, $('#file')[0].files[i]);
+			  	
+			  	console.log($('#file')[0].files[i]);
+			  }
+              console.log(formData);
+              
+              $("#msg").html("图片正在上传，请稍候……");
+
+              $.ajax({
+                url: "/admin/imageUpload",
+                type: 'POST',
+                cache: false,
+                data: formData,
+                processData: false,
+                contentType: false,
+            }).done(function(res) {
+            for(var i = 0;i<imglength;i++){
+              var src = 'src'+i;
+              var code = 'code'+i;
+              var srca=res[src];
+              var codea=res[code];
+              if(res[code]=="200"){
+                  $("#msg").html("图片上传成功");
+                  
+                  
+                  document.getElementById("fimg"+i).src=res[src];
+                  document.getElementById("img"+i).value=res[src];
+                  document.getElementById("fimg"+i).style.display="inline-block";
+
+              }
+              }
+            }).fail(function(res) {
+            	$("#msg").html("");
+                alert("上传失败，请检查网络后重试");
+            },"json");
+      	
+      };
+      
+      function showinfo(){
+    
+              var id = $("#patientid").val();
+              
+              
+
+              $.ajax({
+                url: "/admin/ser?id="+id,
+                type: 'POST',
+                cache: false,
+                data: id,
+                processData: false,
+                contentType: false,
+            }).done(function(res) {
+              if(res!=""){
+              //置空
+	             document.getElementById("fimg0").src="/img/add2.png";
+	             document.getElementById("fimg1").src="/img/add2.png";
+	             document.getElementById("fimg2").src="/img/add2.png";
+	             document.getElementById("fimg3").src="/img/add2.png";
+	             document.getElementById("name").value="";
+                 document.getElementById("sex").value="";
+                 document.getElementById("age").value="";
+                 document.getElementById("number").value="";
+                 document.getElementById("doct").value="";
+                 document.getElementById("address").value="";
+                 document.getElementById("tel").value="";
+                 document.getElementById("reimbursement").value="";
+                 document.getElementById("marryed").value="";
+                 document.getElementById("departmentid").value="";
+                 document.getElementById("zhenduan").value="";
+                 document.getElementById("zhusu").value="";
+                 document.getElementById("zkjc").value="";
+                 document.getElementById("zlfs").value="";
+                 document.getElementById("zltime").value="";
+                 document.getElementById("jws").value="";
+                 
+                 document.getElementById("name").value=res.name;
+                 document.getElementById("sex").value=res.sex;
+                 document.getElementById("age").value=res.age;
+                 document.getElementById("number").value=res.number;
+                 document.getElementById("doct").value=res.doct;
+                 document.getElementById("address").value=res.address;
+                 document.getElementById("tel").value=res.tel;
+                 document.getElementById("reimbursement").value=res.reimbursement;
+                 document.getElementById("marryed").value=res.marryed;
+                 document.getElementById("departmentid").value=res.departmentid;
+                 document.getElementById("zhenduan").value=res.zhenduan;
+                 document.getElementById("zhusu").value=res.zhusu;
+                 document.getElementById("zkjc").value=res.zkjc;
+                 document.getElementById("zlfs").value=res.zlfs;
+                 document.getElementById("zltime").value=res.zltime;
+                 document.getElementById("jws").value=res.jws;
+                 if(res.img0!=null&&res.img0!=""){
+                 	document.getElementById("fimg0").src=res.img0;
+                 	$("#fimg0").attr('data-source',res.img0);
+	                document.getElementById("fimg0").style.display="inline-block";
+	                $("#fimg0").removeAttr("onclick");
+                 }
+                 if(res.img1!=null&&res.img1!=""){
+	                 document.getElementById("fimg1").src=res.img1;
+	                 $("#fimg1").attr('data-source',res.img1);
+	                 document.getElementById("fimg1").style.display="inline-block";
+	                 $("#fimg1").removeAttr("onclick");
+                 }
+                 if(res.img2!=null&&res.img2!=""){
+	                 document.getElementById("fimg2").src=res.img2;
+	                 $("#fimg2").attr('data-source',res.img2);
+	                 document.getElementById("fimg2").style.display="inline-block";
+	                 $("#fimg2").removeAttr("onclick");
+                 }
+                 if(res.img3!=null&&res.img3!=""){
+	                 document.getElementById("fimg3").src=res.img3;
+	                 $("#fimg3").attr('data-source',res.img3);
+	                 document.getElementById("fimg3").style.display="inline-block";
+	                 $("#fimg3").removeAttr("onclick");
+                 }
+                 $('#lightbox_2').lightbox();
+                 document.getElementById("name").readOnly=true;
+                 document.getElementById("sex").disabled=true;
+                 document.getElementById("age").readOnly=true;
+                 document.getElementById("number").readOnly=true;
+                 document.getElementById("doct").readOnly=true;
+                 document.getElementById("address").readOnly=true;
+                 document.getElementById("tel").readOnly=true;
+                 document.getElementById("reimbursement").disabled=true;
+                 document.getElementById("marryed").readOnly=true;
+                 document.getElementById("departmentid").disabled=true;
+                 document.getElementById("zhenduan").readOnly=true;
+                 document.getElementById("zhusu").readOnly=true;
+                 document.getElementById("zkjc").readOnly=true;
+                 document.getElementById("zlfs").readOnly=true;
+                 document.getElementById("zltime").readOnly=true;
+                 document.getElementById("jws").readOnly=true;
+              }
+              else{
+              	alert("请检查网络后重试");
+              }
+            }).fail(function(res) {
+            	alert("请检查网络后重试");
+            },"json");
+
+      		
+      	
+      };
+      
+      	function sub(){
+              if ($("#name").val() == ""||$("#sex").val() == ""||$("#age").val() == ""||$("#number").val() == ""||$("#doct").val() == ""||$("#address").val() == ""||$("#tel").val() == ""||$("#marryed").val() == "") {
+                  alert("请填写完整资料！");
+                  return;
+              }
+      		if(type=='1'){
+      			document.getElementById("list").submit();
+      		}
+      		if(type=='3'){
+      			document.getElementById("record").submit();
+      		}
+      		
+      	}
+      	changepower();
+      	function changepower(){
+      		
+      		if(type=='1'){
+      			document.getElementById("list").style.display="inline";
+      			document.getElementById("record").style.display="none";
+      		}
+      		
+      		if(type=='3'){
+      		$("#patientid option[value='${id!}']").attr("selected","selected");  
+      			showinfo();
+      			document.getElementById("list").style.display="inline";
+      			document.getElementById("record").style.display="inline";
+      		}
+      	}
+      	
+      	
+      </script>
+  </div>
+</div>
+  
+ 
+<!--end-main-container-part-->
+
+<#include "inc/admin_footer.html"/>
+
+</body>
+</html>
+

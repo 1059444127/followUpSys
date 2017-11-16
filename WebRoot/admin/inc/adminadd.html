@@ -1,0 +1,9 @@
+	<div style="width:98%;text-align:right;margin-top:10px;margin-left:1%;">
+	<#if addtype=="1">
+		<button class="btn btn-success" onclick="javascript:window.location.href='/admin/add?type=${addtype!}';">添加患者</button>
+	<#elseif addtype=="2">
+		<button class="btn btn-success" onclick="javascript:window.location.href='/admin/add?type=${addtype!}';">添加患者病史</button>
+	<#elseif addtype=="3">
+		<button class="btn btn-success" onclick="javascript:window.location.href='/admin/add?type=${addtype!}';">添加随访记录</button>
+	</#if>
+    </div>

@@ -1,0 +1,157 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>${softinfo.softinfo!}</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="stylesheet" href="/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/css/bootstrap-responsive.min.css" />
+<link rel="stylesheet" href="/css/fullcalendar.css" />
+<link rel="stylesheet" href="/css/matrix-style.css" />
+<link rel="stylesheet" href="/css/matrix-media.css" />
+<link rel="stylesheet" href="/css/jquery.gritter.css" />
+<link rel="stylesheet" href="/css/style1.css" />
+</head>
+<body>
+
+<#include "inc/admin_header.html"/>
+
+<!-- 导航条 -->
+<!--main-container-part-->
+<div id="content">
+<!--breadcrumbs-->
+  <div id="content-header">
+    <div id="breadcrumb"> <a href="/" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> 首页</a></div>
+  </div>
+<!--End-breadcrumbs-->
+
+
+	<#include "inc/adminadd.html"/>
+
+
+
+  	<div class="widget-box" style="margin-left:1%;width:98%;">
+          <div class="widget-title">
+            <h5>${pagetitle!}</h5>
+            <div class="search-ground">
+            	<font color="red">*仅可通过用户名搜索</font>
+				<input type="text" id="searchtext" placeholder="输入搜索内容...">
+				<button  onclick="search()">搜索</button>
+			</div>
+          </div>
+          <div class="widget-content nopadding">
+            <table class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th>住院号</th>
+                  <th>患者姓名</th>
+                  <th>随访医生</th>
+				  <th width="10%">随访日期</th>
+				  <th>随访状态</th>			
+                  <th width="18%">操作</th>
+                </tr>
+              </thead>
+              <tbody>
+             	<#list record.getList() as x>
+                <tr class="odd gradeX" style="text-align: center;">
+                
+                  <td style="text-align: center;">${x.number!}</td>
+                  <td style="text-align: center;"><a href="/admin/showedit?id=${x.id!}&type=3" style="color:blue;">${x.name!}</a></td>
+                  
+                  <td style="text-align: center;">${x.doct!}</td>
+                  <td style="text-align: center;">${x.stime!}</td>
+                  <td style="text-align: center;">
+                    <#if x.istrue==0>
+                	<font style="color: red">待随访...
+                	<#else>
+                	随访完成
+                	</#if>                  
+                  </td>
+                  <td style="text-align: center;">
+                  	<a href="/admin/showedit?id=${x.id!}&type=3">编辑</a>
+                  </td>
+                </tr>
+                </#list>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+
+
+
+    <div style="width:98%;text-align:center;margin-top:10px;margin-left:1%;">
+    	<#include "/common/_paginate.html" />
+			<@paginate currentPage=record.pageNumber totalPage=record.totalPage actionUrl="/admin/record/" />
+	</div>
+  </div>
+</div>
+
+<!--end-main-container-part-->
+
+
+<script>
+
+	function del(id){
+		
+		if(window.confirm('你确认删除吗？')){
+    
+			$.post("/admin/del",{id:id,type:3},
+				function(data){
+			   	if(data.code=="200"){
+			   		alert(data.msg);
+					}
+					else{
+					alert(data.msg);
+					}
+					location.reload();
+			   	});
+			
+      return true;
+    }else{
+      return false;
+    }
+    }
+    
+    function done(id){
+		
+		if(window.confirm('完成本次随访？')){
+    
+			$.post("/admin/done",{id:id,type:3},
+				function(data){
+			   	if(data.code=="200"){
+			   		alert(data.msg);
+					}
+					else{
+					alert(data.msg);
+					}
+					location.reload();
+			   	});
+			
+      return true;
+    }else{
+      return false;
+    }
+    }
+    function edit(id){
+		$.post("/admin/edit",{id:id,type:3});
+	}
+
+	function search(){
+		if($("#searchtext").val()==""||undefined==$("#searchtext").val()||null==$("#searchtext").val()){
+			alert("请输入要搜索的内容！");
+			return;
+		}
+		location.href="/admin/searchname?search="+$("#searchtext").val();
+    }
+	
+</script>
+
+
+
+
+<#include "inc/admin_footer.html"/>
+
+</body>
+</html>
